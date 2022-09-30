@@ -3,6 +3,7 @@
 import cgi
 import os
 from templates import login_page, secret_page
+import secret
 
 def parse_cookies(cookie_string):
     cookies = cookie_string.split(";")
@@ -12,21 +13,18 @@ def parse_cookies(cookie_string):
         result[split_cookie[0]] = split_cookie[1]
     return result
 
-#cookies = parse_cookies(os.environ["HTTP_COOKIE"])
+cookies = parse_cookies(os.environ["HTTP_COOKIE"])
 
 form = cgi.FieldStorage()
-
 username = form.getfirst("username")
 password = form.getfirst("password")
 
 header = ""
-header += "Content-Type: text/html\r\n" # HTML is following
-
+header += "Content-Type: text/html\r\n"
 body = ""
 
-
-#if username is not None or ('logged' in cookies and cookies['logged]'] == 'true'):
-if username is not None:
+if username is not None or ('logged' in cookies and cookies['logged]'] == 'true'):
+#if username is not None:
     body += secret_page(username, password)
     header += "Set-Cookie: logged=true; Max-Age=60\r\n"
     header += "Set-Cookie: cookie=nom\r\n"
